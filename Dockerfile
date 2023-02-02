@@ -21,8 +21,9 @@ FROM base AS build
 
 WORKDIR /tmp/workdir
 
-ENV FFMPEG_VERSION=5.1.2 \
-        AOM_VERSION=v3.5.0 \
+ENV \
+        FFMPEG_VERSION=5.1.2 \
+        AOM_VERSION=3.5.0 \
         CHROMAPRINT_VERSION=1.5.1 \
         FDKAAC_VERSION=2.0.2 \
         FONTCONFIG_VERSION=2.12.4 \
@@ -44,6 +45,7 @@ ENV FFMPEG_VERSION=5.1.2 \
         VORBIS_VERSION=1.3.7 \
         VPX_VERSION=1.12.0 \
         WEBP_VERSION=1.3.0 \
+        # https://code.videolan.org/videolan/x264/-/commit/baee400fa9ced6f5481a728138fed6e867b0ff7f
         X264_VERSION=baee400fa9ced6f5481a728138fed6e867b0ff7f \
         X265_VERSION=3.4 \
         XAU_VERSION=1.0.11 \
@@ -60,6 +62,13 @@ ENV FFMPEG_VERSION=5.1.2 \
         SRC=/usr/local
 
 ARG \
+        LD_LIBRARY_PATH="/opt/ffmpeg/lib" \
+        MAKEFLAGS="-j2" \
+        PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig" \
+        PREFIX="/opt/ffmpeg" \
+        LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64" \
+        \
+        AOM_SHA512SUM="9e24a01be0cd65e8567a7c34dc4c8d7b2c788110cca0151eff09e41d20634dd29389564e25e1710e7adb04a12c7bb3bdac4b1c0473f7a89ecf38240d85ea7a74  -" \
         FREETYPE_SHA512SUM="4f923c82121940e866022c1ee6afb97f447b83ab8b54188df169029f37589e3bad0768a3bfb3095982804db1eec582f05aa846dfb32639697e231af8d52676cc *.tar.gz" \
         FRIBIDI_SHA512SUM="c947b3154fa39543dda4d6b450de5ffc2f49a0404f38e48ee6fd31e0823b46c3c83d1538fdcbaefa729101598c877c9b3d9041b42a8665037753cb22c12049c4 *.tar.gz" \
         LIBASS_SHA512SUM="65c215127c2dea21b0be071fc205de9e3515eed707a737912cb12f07cfea2ed38aff8f58c131003fa1463e736d2ef56fc3b76d43213a22267c538a5aa4f4d9d7 *.tar.gz" \
@@ -72,17 +81,28 @@ ARG \
         LIBBLURAY_SHA512SUM="94dbf3b68d1c23fe4648c153cc2f0c251886fac0a6b6bbe3a77caabaa5322682f712afe4a7b6b16ca3f06744fbc0e1ca872209a32898dcf0ae182055d335aec1 *.tar.bz2" \
         LIBZMQ_SHA512SUM="e198ef9f82d392754caadd547537666d4fba0afd7d027749b3adae450516bcf284d241d4616cad3cb4ad9af8c10373d456de92dc6d115b037941659f141e7c0e *.tar.gz" \
         LIBARIBB24_SHA512SUM="622cc0c3928fd6db0b5ab3921f27348c956af20f8c0133ad5d9bf4de3d199077d9f23cc86ae149a9f0d13c7ee5906ec95de3fb8388207160cebd1f0c59078c8f *.tar.gz" \
-        LD_LIBRARY_PATH="/opt/ffmpeg/lib" \
-        MAKEFLAGS="-j2" \
-        PKG_CONFIG_PATH="/opt/ffmpeg/share/pkgconfig:/opt/ffmpeg/lib/pkgconfig:/opt/ffmpeg/lib64/pkgconfig" \
-        PREFIX="/opt/ffmpeg" \
-        LD_LIBRARY_PATH="/opt/ffmpeg/lib:/opt/ffmpeg/lib64" \
-        # TODO: sha512sum all
-        # _SHA512SUM=" *.tar.gz"
         VMAF_SHA512SUM="4854247bba4b323d08fa9ef4a082a08ed9ab1763dffbe0a1af2b594205e908f47dfb919d03a32e0bce77a40e33e4b2a2594e5d1e8e081379640d6abf279a129b *.tar.gz" \
         OPENCORE_AMR_SHA512SUM="8955169954b09d2d5e2190888602c75771b72455290db131ab7f40b587df32ea6a60f205126b09193b90064d0fd82b7d678032e2b4c684189788e175b83d0aa7 *.tar.gz" \
         X264_SHA512SUM="63ca9ee5f9fb4b39afc0d7ea682ec75c2e5332c2bac26fc6269d14f0e1f7f7b3e3c7b5664bb66247384c5eba1d7e1b8c5e8e2a547fbe2d81408dee345797e855 *.tar.bz2" \
-        X265_SHA512SUM="17639324c9428087cda9cfa5b57bcb82403226ec5b4fc0da46028e0700452f7bb12df0f4f3a8fd5d70ebdd912ba7589bd99b01c9b7e0d4fa00424e1502580090 *.tar.gz"
+        X265_SHA512SUM="17639324c9428087cda9cfa5b57bcb82403226ec5b4fc0da46028e0700452f7bb12df0f4f3a8fd5d70ebdd912ba7589bd99b01c9b7e0d4fa00424e1502580090 *.tar.gz" \
+        VPX_SHA512SUM="dc059bc3102b75524ae29989372334b3e0f2acf1520e5a4daa4073831bb55949d82897c498fb9d2d38b59f1a66bb0ad24407d0d086b1e3a8394a4933f04f2ed0 *.tar.gz" \
+        VEDP_SHA512SUM="5af6999654e9ba3189574158c194396e3ad7b7d5061abf2711a7c93558a5898cd99adccd1c051e9a7910beb915fba8e703d33e7b6f06753b6f68c009c0e0d2bc *.tar.gz" \
+        LAME_SHA512SUM="0844b9eadb4aacf8000444621451277de365041cc1d97b7f7a589da0b7a23899310afd4e4d81114b9912aa97832621d20588034715573d417b2923948c08634b *.tar.gz" \
+        FDK_AAC_SHA512SUM="616207e85035d1659a2b7808ca6ec02ef53c1c4b39eb280fe861f82a4cf548e5db2ac381c496bad37dfc2b8c6677fe704d9fd8449e43d1f93d3e636239e0191b *.tar.gz" \
+        OPENJPEG_SHA512SUM="08975a2dd79f1e29fd1824249a5fbe66026640ed787b3a3aa8807c2c69f994240ff33e2132f8bf15bbc2202bef7001f98e42d487231d4eebc8e503538658049a *.tar.gz" \
+        FONTCONFIG_SHA512SUM="f336e9220afe738e0bf7186d87a5eb09842342ad99ca2102c69820a1f0b232e15c61ef72ae3f5d56503f5be32557d09180a80e05690e85b4eb13ed88f5cece81 *.tar.bz2" \
+        KVAZAAR_SHA512SUM="476abe251d7f555911851bc5a7dca84a96c0cd243c6a45dd59b808b8adf2b0787f69101a061bd48dfb6fe54a0aea046417f21fc826f14f518cada25c6d22aec4 *.tar.gz" \
+        XORG_MACROS_SHA512SUM="fb19daf080ffa106f621123aa5554c0ae7b02f3a66a739e49124c8f7939208450188e7b0ad2d3aca72809394ea697b6f85139d34df6e483b65e25c572c19cb8c *.tar.gz" \
+        XPROTO_SHA512SUM="efc583809c8fec8cee36873310658fb15edd54edf0117b7012b224ff3d38934731bed15cec3eddf0bf896035559b1a3eb4939f7d6a4e5ad8dfe2a3f1b2299230 *.tar.gz" \
+        LIBXAU_SHA512SUM="315625ae6657e817c09c83da53029488bd5140bc1048eef1072b12958457fdec6c41f79b190cf10885559d2e4c7d47110cd08369b438ca47749790c51edd8492 *.tar.gz" \
+        LIBPTHREAD_STUBS_SHA512SUM="5293c847f5d0c47a6956dd85b6630866f717e51e1e9c48fa10f70aa1e8268adc778eaf92504989c5df58c0dcde656f036248993b0ea5f79d4303012bfeff3c72 *.tar.gz" \
+        LIBXCB_PROTO_SHA512SUM="eee19e38ea9d62d2cb7e351dbff4057e357718c3f429cf0458909518db3652eba89f02587a58a17ee542cbdebecf898383f27676a54a4c13eb7c8b50246677de *.tar.gz" \
+        FFMPEG_SHA512SUM="69b6ed0562402261187b4a4e2d84c31cfb68dd74fbaad22e7ef797db6fe7a38cedeec3bf178f14338b3b3777e458e9f2f57c077162cb2823edafa4484d354022 *.tar.bz2" \
+        LIBXCB_SHA512SUM="7f4d176e4bcd2e8e99ed7d3b0c03c28682610c695e0d995bda8677ab5835871352df11a8d3f460eb805d9ac1241237efe5f1bd4777a605b3827ee9c8b17e4456 *.tar.gz" \
+        SRT_SHA512SUM="f3aa1f7773540e2dd31cd19b124eec3c3d830f59c08d953cae01e129a58db7e639bdf94c8a5a678435ae9a1d2402e2c77196fc9c4e75b42aa37d8eafcc16f436 *.tar.gz" \
+        CHROMAPRINT_SHA512SUM="ea16e4d2b879c15b1d9b9ec93878da8b893f1834c70942663e1d2d106c2e0a661094fe2dd3bae7a6c2a1f9d5d8fab5e0b0ba493561090cf57b2228606fad1e66 *.tar.gz" \
+        LIBXML2_SHA512SUM="045c958950d375d0badd4ae954f093d1ebf533e5774afa2c87f6e8e5847d367baea421683c34e512cc989b6042bc98db7f27b734bd01abf325ce45f06262d805 *.tar.gz" \
+        PNG_SHA512SUM="19851afffbe2ffde62d918f7e9017dec778a7ce9c60c75cdc65072f086e6cdc9d9895eb7b207535a84cb5f4ead77ebc2aa9d80025f153662903023e1f7ab9bae *.tar.gz"
 
 RUN set -eux; \
         buildDeps="autoconf \
@@ -232,8 +252,9 @@ RUN set -eux; \
         DIR=/tmp/vpx; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sL https://codeload.github.com/webmproject/libvpx/tar.gz/v${VPX_VERSION} | \
-        tar -zx --strip-components=1; \
+        curl --silent --location https://codeload.github.com/webmproject/libvpx/tar.gz/v${VPX_VERSION} --output vpx.tar.gz; \
+        echo ${VPX_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=vpx.tar.gz; \
         ./configure --prefix="${PREFIX}" --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth --enable-pic --enable-shared \
         --disable-debug --disable-examples --disable-docs --disable-install-bins ; \
         make; \
@@ -245,8 +266,9 @@ RUN set -eux; \
         DIR=/tmp/vebp; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${WEBP_VERSION}.tar.gz | \
-        tar -zx --strip-components=1; \
+        curl --silent --location https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${WEBP_VERSION}.tar.gz --output vebp.tar.gz; \
+        echo ${VEDP_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=vebp.tar.gz; \
         ./configure --prefix="${PREFIX}" --enable-shared ; \
         make; \
         make install; \
@@ -257,8 +279,9 @@ RUN set -eux; \
         DIR=/tmp/lame; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sL https://sourceforge.net/projects/lame/files/lame/${LAME_VERSION}/lame-${LAME_VERSION}.tar.gz/download | \
-        tar -zx --strip-components=1; \
+        curl --silent --location https://sourceforge.net/projects/lame/files/lame/${LAME_VERSION}/lame-${LAME_VERSION}.tar.gz/download --output lame.tar.gz; \
+        echo ${LAME_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=lame.tar.gz; \
         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin" --enable-shared --enable-nasm --disable-frontend; \
         make; \
         make install; \
@@ -269,9 +292,9 @@ RUN set -eux; \
         DIR=/tmp/xvid; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://downloads.xvid.com/downloads/xvidcore-${XVID_VERSION}.tar.gz; \
+        curl --silent --location https://downloads.xvid.com/downloads/xvidcore-${XVID_VERSION}.tar.gz --output xvid.tar.gz; \
         echo ${XVID_SHA512SUM} | sha512sum --check; \
-        tar -zx -f xvidcore-${XVID_VERSION}.tar.gz; \
+        tar --ungzip --extract --file=xvid.tar.gz; \
         cd xvidcore/build/generic; \
         ./configure --prefix="${PREFIX}" --bindir="${PREFIX}/bin"; \
         make; \
@@ -283,8 +306,9 @@ RUN set -eux; \
         DIR=/tmp/fdk-aac; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sL https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz | \
-        tar -zx --strip-components=1; \
+        curl --silent --location https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz --output fdk_aac.tar.gz; \
+        echo ${FDK_AAC_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=fdk_aac.tar.gz; \
         autoreconf -fiv; \
         ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}"; \
         make; \
@@ -296,8 +320,9 @@ RUN set -eux; \
         DIR=/tmp/openjpeg; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sL https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz | \
-        tar -zx --strip-components=1; \
+        curl --silent --location https://github.com/uclouvain/openjpeg/archive/v${OPENJPEG_VERSION}.tar.gz --output openjpeg.tar.gz; \
+        echo ${OPENJPEG_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=openjpeg.tar.gz; \
         cmake -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_INSTALL_PREFIX="${PREFIX}" .; \
         make; \
         make install; \
@@ -308,9 +333,9 @@ RUN set -eux; \
         DIR=/tmp/freetype; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz; \
+        curl --silent --location https://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz --output freetype.tar.gz; \
         echo ${FREETYPE_SHA512SUM} | sha512sum --check; \
-        tar -zx --strip-components=1 -f freetype-${FREETYPE_VERSION}.tar.gz; \
+        tar --ungzip --extract --strip-components=1 --file=freetype.tar.gz; \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared; \
         make; \
         make install; \
@@ -321,9 +346,9 @@ RUN set -eux; \
         DIR=/tmp/vid.stab; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://github.com/georgmartius/vid.stab/archive/v${LIBVIDSTAB_VERSION}.tar.gz; \
+        curl --silent --location https://github.com/georgmartius/vid.stab/archive/v${LIBVIDSTAB_VERSION}.tar.gz --output vid.stab.tar.gz; \
         echo ${LIBVIDSTAB_SHA512SUM} | sha512sum --check;  \
-        tar -zx --strip-components=1 -f v${LIBVIDSTAB_VERSION}.tar.gz; \
+        tar --ungzip --extract --strip-components=1 --file=vid.stab.tar.gz; \
         cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" .; \
         make; \
         make install; \
@@ -334,9 +359,9 @@ RUN set -eux; \
         DIR=/tmp/fribidi; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://github.com/fribidi/fribidi/archive/${FRIBIDI_VERSION}.tar.gz; \
+        curl --silent --location https://github.com/fribidi/fribidi/archive/${FRIBIDI_VERSION}.tar.gz --output fribidi.tar.gz; \
         echo ${FRIBIDI_SHA512SUM} | sha512sum --check; \
-        tar -zx --strip-components=1 -f ${FRIBIDI_VERSION}.tar.gz; \
+        tar --ungzip --extract --strip-components=1 --file=fribidi.tar.gz; \
         sed -i 's/^SUBDIRS =.*/SUBDIRS=gen.tab charset lib bin/' Makefile.am; \
         ./bootstrap --no-config --auto; \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared; \
@@ -349,8 +374,9 @@ RUN set -eux; \
         DIR=/tmp/fontconfig; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2; \
-        tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2; \
+        curl --silent --location https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 --output fontconfig.tar.bz2; \
+        echo ${FONTCONFIG_SHA512SUM} | sha512sum --check; \
+        tar --bzip2 --extract --strip-components=1 --file=fontconfig.tar.bz2; \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared; \
         make; \
         make install; \
@@ -361,9 +387,9 @@ RUN set -eux; \
         DIR=/tmp/libass; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://github.com/libass/libass/archive/${LIBASS_VERSION}.tar.gz; \
+        curl --silent --location https://github.com/libass/libass/archive/${LIBASS_VERSION}.tar.gz --output libass.tar.gz; \
         echo ${LIBASS_SHA512SUM} | sha512sum --check; \
-        tar -zx --strip-components=1 -f ${LIBASS_VERSION}.tar.gz; \
+        tar --ungzip --extract --strip-components=1 --file=libass.tar.gz; \
         ./autogen.sh; \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared --disable-harfbuzz; \
         make; \
@@ -375,8 +401,9 @@ RUN set -eux; \
         DIR=/tmp/kvazaar; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://github.com/ultravideo/kvazaar/archive/v${KVAZAAR_VERSION}.tar.gz; \
-        tar -zx --strip-components=1 -f v${KVAZAAR_VERSION}.tar.gz; \
+        curl --silent --location https://github.com/ultravideo/kvazaar/archive/v${KVAZAAR_VERSION}.tar.gz --output kvazaar.tar.gz; \
+        echo ${KVAZAAR_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=kvazaar.tar.gz; \
         ./autogen.sh; \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared; \
         make; \
@@ -386,14 +413,17 @@ RUN set -eux; \
 ## aom https://aomedia.googlesource.com/aom
 RUN set -eux; \
         DIR=/tmp/aom; \
-        git clone --branch ${AOM_VERSION} --depth 1 https://aomedia.googlesource.com/aom ${DIR} ; \
-        cd ${DIR} ; \
-        rm -rf CMakeCache.txt CMakeFiles ; \
-        mkdir -p ./aom_build ; \
-        cd ./aom_build ; \
+        git clone --branch v${AOM_VERSION} --depth 1 https://aomedia.googlesource.com/aom ${DIR}; \
+        cd ${DIR}; \
+        if [[ "${AOM_SHA512SUM}" != "$(sha512sum $(git ls-files) | sha512sum)" ]]; \
+        then echo "computed checksum did NOT match"; exit 1; \
+        else echo "computed checksum match"; fi; \
+        rm --recursive --force CMakeCache.txt CMakeFiles; \
+        mkdir --parents ./aom_build; \
+        cd ./aom_build; \
         cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DBUILD_SHARED_LIBS=1 ..; \
-        make ; \
-        make install ; \
+        make; \
+        make install; \
         rm --recursive --force ${DIR}
 
 ## libxcb (and supporting libraries) for screen capture https://xcb.freedesktop.org/
@@ -401,8 +431,9 @@ RUN set -eux; \
         DIR=/tmp/xorg-macros; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://www.x.org/archive/individual/util/util-macros-${XORG_MACROS_VERSION}.tar.gz; \
-        tar -zx --strip-components=1 -f util-macros-${XORG_MACROS_VERSION}.tar.gz; \
+        curl --silent --location https://www.x.org/archive/individual/util/util-macros-${XORG_MACROS_VERSION}.tar.gz --output xorg_macros.tar.gz; \
+        echo ${XORG_MACROS_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=xorg_macros.tar.gz; \
         ./configure --srcdir=${DIR} --prefix="${PREFIX}"; \
         make; \
         make install; \
@@ -413,8 +444,9 @@ RUN set -eux; \
         DIR=/tmp/xproto; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://www.x.org/archive/individual/proto/xproto-${XPROTO_VERSION}.tar.gz; \
-        tar -zx --strip-components=1 -f xproto-${XPROTO_VERSION}.tar.gz; \
+        curl --silent --location https://www.x.org/archive/individual/proto/xproto-${XPROTO_VERSION}.tar.gz --output xproto.tar.gz; \
+        echo ${XPROTO_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=xproto.tar.gz; \
         ./configure --srcdir=${DIR} --prefix="${PREFIX}"; \
         make; \
         make install; \
@@ -425,8 +457,9 @@ RUN set -eux; \
         DIR=/tmp/libXau; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://www.x.org/archive/individual/lib/libXau-${XAU_VERSION}.tar.gz; \
-        tar -zx --strip-components=1 -f libXau-${XAU_VERSION}.tar.gz; \
+        curl --silent --location https://www.x.org/archive/individual/lib/libXau-${XAU_VERSION}.tar.gz --output libXau.tar.gz; \
+        echo ${LIBXAU_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=libXau.tar.gz; \
         ./configure --srcdir=${DIR} --prefix="${PREFIX}"; \
         make; \
         make install; \
@@ -437,21 +470,22 @@ RUN set -eux; \
         DIR=/tmp/libpthread-stubs; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://xcb.freedesktop.org/dist/libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz; \
-        tar -zx --strip-components=1 -f libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz; \
+        curl --silent --location https://xcb.freedesktop.org/dist/libpthread-stubs-${LIBPTHREAD_STUBS_VERSION}.tar.gz --output libpthread_stubs.tar.gz; \
+        echo ${LIBPTHREAD_STUBS_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=libpthread_stubs.tar.gz; \
         ./configure --prefix="${PREFIX}"; \
         make; \
         make install; \
         rm --recursive --force ${DIR}
-
 
 ## libxcb-proto https://gitlab.freedesktop.org/xorg/proto/xcbproto
 RUN set -eux; \
         DIR=/tmp/libxcb-proto; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://gitlab.freedesktop.org/xorg/proto/xcbproto/-/archive/xcb-proto-${XCBPROTO_VERSION}/xcbproto-xcb-proto-${XCBPROTO_VERSION}.tar.gz; \
-        tar -zx --strip-components=1 -f xcbproto-xcb-proto-${XCBPROTO_VERSION}.tar.gz; \
+        curl --silent --location https://gitlab.freedesktop.org/xorg/proto/xcbproto/-/archive/xcb-proto-${XCBPROTO_VERSION}/xcbproto-xcb-proto-${XCBPROTO_VERSION}.tar.gz --output libxcb_proto.tar.gz; \
+        echo ${LIBXCB_PROTO_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=libxcb_proto.tar.gz; \
         ACLOCAL_PATH="${PREFIX}/share/aclocal" ./autogen.sh; \
         ./configure --prefix="${PREFIX}"; \
         make; \
@@ -463,8 +497,9 @@ RUN set -eux; \
         DIR=/tmp/libxcb; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://gitlab.freedesktop.org/xorg/lib/libxcb/-/archive/libxcb-${LIBXCB_VERSION}/libxcb-libxcb-${LIBXCB_VERSION}.tar.gz; \
-        tar -zx --strip-components=1 -f libxcb-libxcb-${LIBXCB_VERSION}.tar.gz; \
+        curl --silent --location https://gitlab.freedesktop.org/xorg/lib/libxcb/-/archive/libxcb-${LIBXCB_VERSION}/libxcb-libxcb-${LIBXCB_VERSION}.tar.gz --output libxcb.tar.gz; \
+        echo ${LIBXCB_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=libxcb.tar.gz; \
         ACLOCAL_PATH="${PREFIX}/share/aclocal" ./autogen.sh; \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared; \
         make; \
@@ -476,8 +511,9 @@ RUN set -eux; \
         DIR=/tmp/libxml2; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sL https://github.com/GNOME/libxml2/archive/refs/tags/v${LIBXML2_VERSION}.tar.gz | \
-        tar -xz --strip-components=1; \
+        curl --silent --location https://github.com/GNOME/libxml2/archive/refs/tags/v${LIBXML2_VERSION}.tar.gz --output libxml2.tar.gz; \
+        echo ${LIBXML2_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=libxml2.tar.gz; \
         ./autogen.sh --prefix="${PREFIX}" --with-ftp=no --with-http=no --with-python=no; \
         make; \
         make install; \
@@ -488,9 +524,9 @@ RUN set -eux; \
         DIR=/tmp/libbluray; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://download.videolan.org/pub/videolan/libbluray/${LIBBLURAY_VERSION}/libbluray-${LIBBLURAY_VERSION}.tar.bz2; \
+        curl --silent --location https://download.videolan.org/pub/videolan/libbluray/${LIBBLURAY_VERSION}/libbluray-${LIBBLURAY_VERSION}.tar.bz2 --output libbluray.tar.bz2; \
         echo ${LIBBLURAY_SHA512SUM} | sha512sum --check; \
-        tar -jx --strip-components=1 -f libbluray-${LIBBLURAY_VERSION}.tar.bz2; \
+        tar --bzip2 --extract --strip-components=1 --file=libbluray.tar.bz2; \
         ./configure --prefix="${PREFIX}" --disable-examples --disable-bdjava-jar --disable-static --enable-shared; \
         make; \
         make install; \
@@ -503,9 +539,9 @@ RUN set -eux; \
         DIR=/tmp/libzmq; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sL https://github.com/zeromq/libzmq/releases/download/v${LIBZMQ_VERSION}/zeromq-${LIBZMQ_VERSION}.tar.gz -o v${LIBZMQ_VERSION}.tar.gz; \
+        curl --silent --location https://github.com/zeromq/libzmq/releases/download/v${LIBZMQ_VERSION}/zeromq-${LIBZMQ_VERSION}.tar.gz --output libzmq.tar.gz; \
         echo ${LIBZMQ_SHA512SUM} | sha512sum --check; \
-        tar -xz --strip-components=1 -f v${LIBZMQ_VERSION}.tar.gz; \
+        tar --ungzip --extract --strip-components=1 --file=libzmq.tar.gz; \
         ./autogen.sh; \
         ./configure --prefix="${PREFIX}" --disable-Werror; \
         patch --binary config/test-driver < test-driver.patch; \
@@ -519,8 +555,9 @@ RUN set -eux; \
         DIR=/tmp/srt; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://github.com/Haivision/srt/archive/v${LIBSRT_VERSION}.tar.gz; \
-        tar -xz --strip-components=1 -f v${LIBSRT_VERSION}.tar.gz; \
+        curl --silent --location https://github.com/Haivision/srt/archive/v${LIBSRT_VERSION}.tar.gz --output srt.tar.gz; \
+        echo ${SRT_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=srt.tar.gz; \
         cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" .; \
         make; \
         make install; \
@@ -531,7 +568,9 @@ RUN set -eux; \
         DIR=/tmp/png; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        git clone https://git.code.sf.net/p/libpng/code ${DIR} -b v${LIBPNG_VERSION} --depth 1; \
+        curl --silent --location https://download.sourceforge.net/libpng/libpng-${LIBPNG_VERSION}.tar.gz --output png.tar.gz; \
+        echo ${PNG_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=png.tar.gz; \
         ./configure --prefix="${PREFIX}"; \
         make check; \
         make install; \
@@ -542,9 +581,9 @@ RUN set -eux; \
         DIR=/tmp/b24; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sLO https://github.com/nkoriyama/aribb24/archive/v${LIBARIBB24_VERSION}.tar.gz; \
+        curl --silent --location https://github.com/nkoriyama/aribb24/archive/v${LIBARIBB24_VERSION}.tar.gz --output b24.tar.gz; \
         echo ${LIBARIBB24_SHA512SUM} | sha512sum --check; \
-        tar -xz --strip-components=1 -f v${LIBARIBB24_VERSION}.tar.gz; \
+        tar --ungzip --extract --strip-components=1 --file=b24.tar.gz; \
         autoreconf -fiv; \
         ./configure CFLAGS="-I${PREFIX}/include -fPIC" --prefix="${PREFIX}"; \
         make; \
@@ -554,8 +593,9 @@ RUN set -eux; \
 ## Download ffmpeg https://ffmpeg.org/
 RUN set -eux; \
         DIR=/tmp/ffmpeg; mkdir --parents ${DIR}; cd ${DIR}; \
-        curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2; \
-        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2; \
+        curl --silent --location https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 --output ffmpeg.tar.bz2; \
+        echo ${FFMPEG_SHA512SUM} | sha512sum --check; \
+        tar --bzip2 --extract --strip-components=1 --file=ffmpeg.tar.bz2; \
         ./configure --disable-debug --disable-doc --disable-ffplay --enable-shared --enable-gpl --extra-libs=-ldl; \
         make; \
         make install
@@ -568,7 +608,9 @@ RUN \
         DIR=/tmp/chromaprint;\
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl -sL https://github.com/acoustid/chromaprint/releases/download/v${CHROMAPRINT_VERSION}/chromaprint-${CHROMAPRINT_VERSION}.tar.gz | tar -zx --strip-components=1; \
+        curl --silent --location https://github.com/acoustid/chromaprint/releases/download/v${CHROMAPRINT_VERSION}/chromaprint-${CHROMAPRINT_VERSION}.tar.gz --output chromaprint.tar.gz;\
+        echo ${CHROMAPRINT_SHA512SUM} | sha512sum --check; \
+        tar --ungzip --extract --strip-components=1 --file=chromaprint.tar.gz; \
         patch --binary src/audio/ffmpeg_audio_reader.h < ffmpeg5.patch; \
         cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=ON .; \
         make; \
@@ -632,11 +674,11 @@ RUN set -eux; \
         ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/; \
         for lib in /usr/local/lib/*.so.*; do ln -s "${lib##*/}" "${lib%%.so.*}".so; done && \
         cp ${PREFIX}/bin/* /usr/local/bin/; \
-        cp -r ${PREFIX}/share/ffmpeg /usr/local/share/; \
+        cp --recursive ${PREFIX}/share/ffmpeg /usr/local/share/; \
         LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf; \
-        mkdir -p /usr/local/include; \
-        cp -r ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include; \
-        mkdir -p /usr/local/lib/pkgconfig; \
+        mkdir --parents /usr/local/include; \
+        cp --recursive ${PREFIX}/include/libav* ${PREFIX}/include/libpostproc ${PREFIX}/include/libsw* /usr/local/include; \
+        mkdir --parents /usr/local/lib/pkgconfig; \
         for pc in ${PREFIX}/lib/pkgconfig/libav*.pc ${PREFIX}/lib/pkgconfig/libpostproc.pc ${PREFIX}/lib/pkgconfig/libsw*.pc; do \
         sed "s:${PREFIX}:/usr/local:g" <"$pc" >/usr/local/lib/pkgconfig/"${pc##*/}"; \
         done
