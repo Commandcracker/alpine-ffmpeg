@@ -333,7 +333,7 @@ RUN set -eux; \
         DIR=/tmp/freetype; \
         mkdir --parents ${DIR}; \
         cd ${DIR}; \
-        curl --silent --location https://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz --output freetype.tar.gz; \
+        curl --silent https://mirrors.sarata.com/non-gnu/freetype/freetype-${FREETYPE_VERSION}.tar.gz --output freetype.tar.gz; \
         echo ${FREETYPE_SHA512SUM} | sha512sum --check; \
         tar --ungzip --extract --strip-components=1 --file=freetype.tar.gz; \
         ./configure --prefix="${PREFIX}" --disable-static --enable-shared; \
