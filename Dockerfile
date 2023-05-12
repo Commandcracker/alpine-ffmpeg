@@ -4,7 +4,7 @@
 #
 #
 
-FROM alpine:3.17.3 AS base
+FROM alpine:3 AS base
 
 RUN set -eux; \
         apk add --no-cache --update \
