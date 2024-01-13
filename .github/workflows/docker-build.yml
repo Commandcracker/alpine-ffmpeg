@@ -23,6 +23,6 @@ jobs:
         with:
           context: .
           build-args: |
-            GNUMAKEFLAGS="-j${{ steps.cores.outputs.count }}"
-            MAKEFLAGS="-j${{ steps.cores.outputs.count }}"
-            SAMUFLAGS="-j${{ steps.cores.outputs.count }}"
+            GNUMAKEFLAGS=-j${{ steps.cores.outputs.count }}
+            MAKEFLAGS=-j${{ steps.cores.outputs.count }}
+            SAMUFLAGS=-j${{ steps.cores.outputs.count }}
