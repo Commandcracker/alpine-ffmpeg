@@ -16,13 +16,13 @@ jobs:
 
       - name: Get Cores 🔲
         id: cores
-        run: nproc
+        run: echo "count=$(nproc)" >> $GITHUB_OUTPUT
 
       - name: Build image 🔨
         uses: docker/build-push-action@v3
         with:
           context: .
           build-args: |
-            GNUMAKEFLAGS="-j${{ steps.cores.outputs }}"
-            MAKEFLAGS="-j${{ steps.cores.outputs }}"
-            SAMUFLAGS="-j${{ steps.cores.outputs }}"
+            GNUMAKEFLAGS="-j${{ steps.cores.outputs.count }}"
+            MAKEFLAGS="-j${{ steps.cores.outputs.count }}"
+            SAMUFLAGS="-j${{ steps.cores.outputs.count }}"
