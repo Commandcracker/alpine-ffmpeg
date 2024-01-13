@@ -100,8 +100,6 @@ ARG \
         PNG_SHA512SUM="e27c61cb8fecd2550ca742aad68560f83bcc5123875f6727c2992258212bd342020e35a0ed95de6c2a2ca3f388f3afe1da7965e98650df3a0b9c5726c8334f95 *.tar.gz" \
         HARFBUZZ_SHA512SUM="3fe54adbdd457c7dd8186c897436982a43e195a62bc0e830fe2dd06ca2c52511b9a717c659a7e30d235ac964df071e8ba1d9f36ee20496a1a80945d7c63fce86 *.tar.gz"
 
-RUN echo $GNUMAKEFLAGS; ggdfg
-
 RUN set -eux; \
         apk add --no-cache --update \
         autoconf \
