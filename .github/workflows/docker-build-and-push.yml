@@ -37,6 +37,10 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
+      - name: Get Cores 🔲
+        id: cores
+        run: nproc
+
       - name: 🔨 Build and Publish 🚀
         uses: docker/build-push-action@v4
         with:
@@ -45,6 +49,6 @@ jobs:
           tags: ghcr.io/commandcracker/ffmpeg:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            GNUMAKEFLAGS="-j$(nproc)"
-            MAKEFLAGS="-j$(nproc)"
-            SAMUFLAGS="-j$(nproc)"
+            GNUMAKEFLAGS="-j${{ steps.cores.outputs }}"
+            MAKEFLAGS="-j${{ steps.cores.outputs }}"
+            SAMUFLAGS="-j${{ steps.cores.outputs }}"

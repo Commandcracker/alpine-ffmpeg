@@ -14,11 +14,15 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
+      - name: Get Cores 🔲
+        id: cores
+        run: nproc
+
       - name: Build image 🔨
         uses: docker/build-push-action@v3
         with:
           context: .
           build-args: |
-            GNUMAKEFLAGS="-j$(nproc)"
-            MAKEFLAGS="-j$(nproc)"
-            SAMUFLAGS="-j$(nproc)"
+            GNUMAKEFLAGS="-j${{ steps.cores.outputs }}"
+            MAKEFLAGS="-j${{ steps.cores.outputs }}"
+            SAMUFLAGS="-j${{ steps.cores.outputs }}"
