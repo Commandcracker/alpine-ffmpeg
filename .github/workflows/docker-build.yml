@@ -6,10 +6,6 @@ on:
     branches-ignore: [main]
   pull_request:
 
-concurrency:
-  group: singleton_push
-  cancel-in-progress: true
-
 jobs:
   build-image:
     runs-on: ubuntu-latest

@@ -5,6 +5,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: singleton_push
+  cancel-in-progress: true
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -40,3 +44,7 @@ jobs:
           push: true
           tags: ghcr.io/commandcracker/ffmpeg:latest
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            GNUMAKEFLAGS: "-j$(nproc)"
+            MAKEFLAGS: "-j$(nproc)"
+            SAMUFLAGS: "-j$(nproc)"
