@@ -45,6 +45,6 @@ jobs:
           tags: ghcr.io/commandcracker/ffmpeg:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            GNUMAKEFLAGS: "-j$(nproc)"
-            MAKEFLAGS: "-j$(nproc)"
-            SAMUFLAGS: "-j$(nproc)"
+            GNUMAKEFLAGS="-j$(nproc)"
+            MAKEFLAGS="-j$(nproc)"
+            SAMUFLAGS="-j$(nproc)"
