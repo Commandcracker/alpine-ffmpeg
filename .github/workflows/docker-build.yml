@@ -6,6 +6,10 @@ on:
     branches-ignore: [main]
   pull_request:
 
+concurrency:
+  group: singleton_push
+  cancel-in-progress: true
+
 jobs:
   build-image:
     runs-on: ubuntu-latest
@@ -18,3 +22,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
+          build-args: |
+            GNUMAKEFLAGS: "-j$(nproc)"
+            MAKEFLAGS: "-j$(nproc)"
+            SAMUFLAGS: "-j$(nproc)"

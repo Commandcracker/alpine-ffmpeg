@@ -1,0 +1,2 @@
+# Ensure all Patch files use LF.
+*.patch text eol=lf
